@@ -1,0 +1,34 @@
+﻿@model IEnumerable<PShop.Areas.Identity.Data.User>
+@{
+    var rolemanager = ViewBag.RoleManager as RoleManager<IdentityRole>;
+    var usermanager = ViewBag.UserManager as UserManager<User>;
+}
+<table class="table ">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                Role
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.UserName
+                </td>
+                <td>
+                    @{
+                        await usermanager.GetRolesAsync(item);
+                     }
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>

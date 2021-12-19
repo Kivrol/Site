@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Item>
+@{ //CultureInfo.CurrentCulture = new CultureInfo("en-US"); CultureInfo.CurrentUICulture = new CultureInfo("en-US"); 
+}
+@inject IHtmlLocalizer<SharedResource> Localizer
+
+@{
+    ViewData["Title"] = Localizer["Wishlist"];
+}
+
+@if (Model.Count<Item>() != 0)
+{
+<h2>Желаемое</h2>
+<table class="table-borderless">
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <div class="container  ">
+
+                        <div class="row">
+                            <partial name="OneItemWishList" model="item" />
+                        </div>
+
+                    </div>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+}
+else
+{
+	<h1 class="text-center">@Localizer["Wishlist is empty!"]</h1>
+
+	<h4 class="text-center">
+		<a class=" btn btn-outline-danger" asp-controller="Home" asp-action="Index">@Localizer["to Home Page"]</a>
+	</h4>
+}

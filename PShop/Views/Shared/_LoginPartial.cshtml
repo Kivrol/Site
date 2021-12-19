@@ -1,0 +1,55 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using System.Text.Json
+@using PShop.Areas.Identity.Data
+
+@inject IHtmlLocalizer<SharedResource> Localizer
+
+@{
+	var ShopCartCount = ViewData["ShopCartCount"] as Nullable<int>;
+}
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+@{
+	var user = await UserManager.GetUserAsync(User);
+
+	List<Item> cart = (user != null && user.ShopCart != null) ? JsonSerializer.Deserialize<List<Item>>(user.ShopCart) : null;
+	var count = cart != null ? cart.Count : 0;
+}
+
+<ol class="navbar-nav">
+	@if (SignInManager.IsSignedIn(User))
+	{
+		<li class="nav-item">
+			<div class="dropdown">
+				<a href="#" class="dropleft text-white" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					@UserManager.GetUserName(User)
+				</a>
+
+				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+					<a id="manage" class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@Localizer["Account"]</a>
+					<a class="dropdown-item" asp-controller="Items" asp-action="WishList">@Localizer["Wishlist"]</a>
+					<a id="logoutForm" class="dropdown-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+						@Localizer["Log out"]
+					</a>
+				</div>
+				<a class="text-white" asp-controller="Items" asp-action="ShopCart">
+					@Localizer["Shop cart"] (@count)
+				</a>
+			</div>
+		</li>
+	}
+	else
+	{
+		<li class="nav-item">
+			<a class="text-white" id="register" asp-area="Identity" asp-page="/Account/Register">@Localizer["Register"]</a>
+		</li>
+		<li>&nbsp</li>
+		<li>&nbsp</li>
+		<li class="nav-item text-white">
+			<a class="text-white" id="login" asp-area="Identity" asp-page="/Account/Login">@Localizer["Log in"]</a>
+		</li>
+	}
+</ol>

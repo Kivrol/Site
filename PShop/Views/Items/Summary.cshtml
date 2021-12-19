@@ -1,0 +1,64 @@
+﻿@model Order
+@{
+	decimal sum = (decimal)ViewData["Sum"];
+	ViewData["Title"] = "Итог";
+	var items = ViewData["items"] as List<Item>;
+	var user = ViewData["user"] as User;
+}
+@inject IHtmlLocalizer<SharedResource> Localizer
+
+<div class="row g-5">
+	<div class="col-md-5 col-lg-4 order-md-last">
+		<h4 class="d-flex justify-content-between align-items-center mb-3">
+			<span class="">@Localizer["Your cart"]</span>
+			<span class="badge bg-dark text-white rounded-pill">@items.Count()</span>
+		</h4>
+		<ul class="list-group mb-4">
+			@foreach (Item item in items)
+			{
+				<li class="list-group-item d-flex justify-content-between lh-sm">
+					<div>
+						<h6 class="my-0">@item.Name</h6>
+						<small class="text-muted"></small>
+					</div>
+					<span class="text-muted">@item.SalePrice().ToString("c")</span>
+				</li>
+			}
+
+			<li class="list-group-item d-flex justify-content-between">
+				<span>@Localizer["Total"]</span>
+				<strong>@sum.ToString("c")</strong>
+			</li>
+		</ul>
+	</div>
+	<div class="col-md-7 col-lg-8">
+		<h4 class="mb-3">@Localizer["Billing address"]</h4>
+		<form asp-action="CreateOrder" asp-route-user="@user" asp-route-items="@items" class="needs-validation" novalidate="">
+			<div class="row g-3">
+				<div class="col-sm-6">
+					<label  class="form-label">@Localizer["First name"]</label>
+					<input asp-for="FirstName" type="text" class="form-control" id="firstName" placeholder="" value="" required="">
+				</div>
+
+				<div class="col-sm-6">
+					<label  class="form-label">@Localizer["Last name"]</label>
+					<input asp-for="LastName" type="text" class="form-control" id="lastName" placeholder="" value="" required="">
+				</div>
+
+				<div class="col-12">
+					<label  class="form-label">@Localizer["Address"]</label>
+					<input asp-for="Address" type="text" class="form-control" id="address" placeholder="" required="">
+				</div>
+
+				<div class="col-md-3">
+					<label  class="form-label">@Localizer["Zip"]</label>
+					<input asp-for="Zip" type="text" class="form-control" id="zip" placeholder="" required="">
+				</div>
+			</div>
+
+			<hr class="my-4">
+
+			<button class="w-100 btn btn-dark btn-lg" type="submit">@Localizer["Make an order"]</button>
+		</form>
+	</div>
+</div>

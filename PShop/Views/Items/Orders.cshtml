@@ -1,0 +1,61 @@
+﻿@model IEnumerable<PShop.Models.Order>
+@inject IHtmlLocalizer<SharedResource> Localizer
+
+@{
+	ViewData["Title"] = Localizer["My Orders"];
+}
+@if (!User.IsInRole("Admin"))
+{
+	<h1>@Localizer["My Orders"]</h1>
+}
+else
+{
+	<h1>@Localizer["Orders"]</h1>
+}
+@if (Model.Count() != 0)
+{
+	@foreach (var order in Model)
+	{
+		<div class="card" style="background-color:white">
+			<div class="card-header">
+				Заказ:@order.Id
+				<br />
+				@order.CreatedDate
+				@if (User.IsInRole("Admin"))
+				{
+					<div class="text-right">
+						@order.Userid
+					</div>
+				}
+			</div>
+			<div class="card-body">
+				@foreach (var item in order.Itemlist)
+				{
+					<partial name="OneItemOrder" model="item" />
+				}
+			</div>
+			<div class="card-footer">
+				<span>
+					@order.FirstName
+				</span>
+				<span>
+					@order.LastName
+				</span>
+				<span>
+					@order.Zip
+				</span>
+				<span>
+					@order.Address
+				</span>
+				<h3>
+					@order.Price.ToString("c")
+				</h3>
+			</div>
+		</div>
+	}
+}
+else
+{
+	<h2>У вас еще нет заказов!</h2>
+}
+

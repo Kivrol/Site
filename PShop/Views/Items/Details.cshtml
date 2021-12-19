@@ -1,0 +1,292 @@
+﻿@model PShop.Models.Item
+@inject IHtmlLocalizer<SharedResource> Localizer
+@{
+	ViewData["Title"] = Model.Name;
+	Review r = new Review();
+
+	var user = ViewData["User"] as User;
+}
+@using System.Text.Json
+@using PShop.Data
+
+@{
+	var shopcart = ViewBag.SCart as List<Item>;
+	var wishlist = ViewBag.Wlist as List<Item>;
+}
+@{
+	//CultureInfo.CurrentCulture = new CultureInfo("en-US"); CultureInfo.CurrentUICulture = new CultureInfo("en-US");
+}
+
+@{
+	var reviews = ViewData["Reviews"] as List<Review>;
+
+	var sale = Model.Sale * 100;
+
+	Model.ScoreCount = 0;
+	Model.ScoreSumm = 0;
+
+	if (reviews != null)
+		foreach (var rev in reviews)
+			if (rev.Item == Model)
+			{
+				Model.ScoreCount++;
+				Model.ScoreSumm += rev.Score;
+			}
+	Model.UpdateAvgScore();
+}
+<div class="card" style="background-color: #ffffff">
+	<div class="card-header">
+		<h2>@Model.Name</h2>
+	</div>
+	<div class="card-body">
+		<div class="row">
+			<div class=" col-md-7">
+				<div class="card" style="background-color: #ffffff">
+					<div class="card-body">
+						@if (Model.Vid != null)
+						{
+							<div id="carouselExampleIndicators" class="carousel slide carousel-fade">
+								<div class="carousel-inner">
+
+									<div class="carousel-item active">
+										<video class="d-block w-100" muted="muted" autoplay="autoplay" controls="controls" src=@Model.Vid></video>
+									</div>
+									<div class="carousel-item">
+										<img class="d-block w-100" src=@Model.Img2 alt="First slide">
+									</div>
+									<div class="carousel-item">
+										<img class="d-block w-100" src=@Model.Img3 alt="Second slide">
+									</div>
+									<div class="carousel-item">
+										<img class="d-block w-100" src=@Model.Img4 alt="Third slide">
+									</div>
+									<div class="carousel-item">
+										<img class="d-block w-100" src=@Model.Img5 alt="Third slide">
+									</div>
+								</div>
+
+								<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev" >
+									<span class="carousel-control-prev-icon" aria-hidden="true" style="color:black"></span>
+									<span class="sr-only">Previous</span>
+								</a>
+								<a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next"  >
+									<span class="carousel-control-next-icon" aria-hidden="true" style="color:black"></span>
+									<span class="sr-only">Next</span>
+								</a>
+							</div>
+						}
+						else
+						{
+							<div id="carouselExampleIndicators" class="carousel slide carousel-fade" data-ride="carousel">
+								<div class="carousel-inner">
+									<div class="carousel-item active">
+										<img class="d-block w-100" src=@Model.Img2 alt="First slide">
+									</div>
+
+									<div class="carousel-item">
+										<img class="d-block w-100" src=@Model.Img3 alt="Second slide">
+									</div>
+									<div class="carousel-item">
+										<img class="d-block w-100" src=@Model.Img4 alt="Third slide">
+									</div>
+									<div class="carousel-item">
+										<img class="d-block w-100" src=@Model.Img5 alt="Third slide">
+									</div>
+								</div>
+
+								<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+									<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+									<span class="sr-only">Previous</span>
+								</a>
+								<a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+									<span class="carousel-control-next-icon" aria-hidden="true"></span>
+									<span class="sr-only">Next</span>
+								</a>
+							</div>
+						}
+					</div>
+					<div class="card-footer">
+						<p class="text-left" style="overflow: auto;">
+							@Model.Description
+						</p>
+					</div>
+
+				</div>
+			</div>
+
+
+			<div class="col-md-5">
+				<div class="card" style="background-color: #ffffff">
+					<div class="card-body text-center">
+
+						@if (Model.ScoreCount > 0)
+						{
+							@if (Model.AvgScore >= 7)
+							{
+								<div class=" text-center rating" style="background-color:#4cff00">
+									@Model.AvgScore.ToString("f")
+								</div>
+							}
+							else if (Model.AvgScore >= 5)
+							{
+								<div class="text-center rating" style="background-color:#ffd800">
+									@Model.AvgScore.ToString("f")
+								</div>
+							}
+							else
+							{
+								<div class="text-center rating" style="background-color:#ff0000">
+									@Model.AvgScore.ToString("f")
+								</div>
+							}
+						}
+
+					</div>
+					<div class="card-body">
+						@if (Model.Sale == 0)
+						{
+							<h3 class="">@Model.Price.ToString("c")</h3>
+						}
+						else
+						{
+							<p class="">
+								<a style="font-size:16px ;color:#4cff00; background-color:#1e6500">&nbsp-@sale%&nbsp</a>&nbsp
+								<s>@Model.Price.ToString("c")</s>
+							</p>
+							<h3 class="">@Model.SalePrice().ToString("c")</h3>
+
+						}
+						<div>
+							@if (Model.Id != shopcart.FirstOrDefault(m => m.Id == Model.Id)?.Id)
+							{
+								<a class=" btn btn-outline-danger" asp-controller="Items" asp-action="ToCart" asp-route-Id="@Model">@Localizer["Add to cart"]</a>
+							}
+							else
+							{
+								<a class=" btn btn-outline-danger" asp-controller="Items" asp-action="ShopCart" asp-route-Id="@Model">@Localizer["Go to cart"]</a>
+							}
+							@if (Model.Id != wishlist.FirstOrDefault(m => m.Id == Model.Id)?.Id)
+							{
+								<a class=" btn btn-outline-info" asp-controller="Items" asp-action="ToWlist" asp-route-Id="@Model">@Localizer["Add to wishlist"]</a>
+							}
+							else
+							{
+								<a class=" btn btn-outline-info" asp-controller="Items" asp-action="WishList" asp-route-Id="@Model">@Localizer["Go to wishlist"]</a>
+							}
+
+						</div>
+					</div>
+					<div class="card-footer" style="overflow: auto;max-height:48rem">
+						<p class="text-left" >
+							<h4>Характеристики:</h4>
+							<p class="" style="white-space:pre-wrap;">
+								@Model.Characteristics
+							</p>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		@if (User.IsInRole("Admin"))
+		{
+			<div>
+				<a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+				<a asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+				<a asp-action="GenKeys" asp-route-id="@Model.Id">Generate keys</a>
+				<a asp-action="AddKey" asp-route-id="@Model.Id">AddKey</a>
+			</div>
+		}
+	</div>
+
+</div>
+<div class="card" style="background-color: #ffffff">
+
+	<h3 class="card-header"> @Localizer["Leave review"]:</h3>
+	<div class="card-body">
+		<form asp-action="AddReview" asp-route-id="@Model.Id" asp-route-username="@user?.UserName">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<div class="form-group">
+
+				<textarea style="background-color: #ffffff" class="form-control " asp-for="@r.Text" id="exampleFormControlTextarea1" rows="3"></textarea>
+
+				<span asp-validation-for="@r.Text" class="text-danger"></span>
+			</div>
+			<div class="form-row align-items-center">
+				<div class="col-auto my-1">
+					<label class="mr-sm-2 sr-only" for="inlineFormCustomSelect">Preference</label>
+					<select asp-for="@r.Score" class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+						@for (int i = 0; i <= 10; i++)
+						{
+							<option value="@i">@i</option>
+						}
+					</select>
+				</div>
+				<div class="col-auto my-1">
+					<button type="submit" class="btn btn-outline-info">@Localizer["Leave review"]:</button>
+				</div>
+				<span asp-validation-for="@r.Text" class="text-danger"></span>
+			</div>
+
+
+		</form>
+	</div>
+</div>
+
+
+
+<div class="card" style="background-color: #ffffff">
+	<h3 class="card-header">@Localizer["All reviews"] @Model.Name :</h3>
+	<div class="card-body table ">
+
+		@{
+			if (reviews != null)
+				foreach (var rev in reviews)
+					if (rev.Item == Model)
+					{
+						<div class="card" style="background-color: #ffffff">
+							<div class="card-header row">
+								<div class="col-1">
+									@if (rev.Score >= 7)
+									{
+										<div class="rating" style="background-color:#4cff00; width:50px">
+											@rev.Score.ToString("f")
+										</div>
+									}
+									else if (rev.Score >= 5)
+									{
+										<div class="rating" style="background-color: #ffd800; width: 50px">
+											@rev.Score.ToString("f")
+										</div>
+									}
+									else
+									{
+										<div class="rating" style="background-color: #ff0000; width: 50px">
+											@rev.Score.ToString("f")
+										</div>
+									}
+								</div>
+								<div class="col-10 text-left">
+									@rev.Author
+								</div>
+							</div>
+							<div class="card-body text-left">
+
+								@rev.Text
+							</div>
+							@if (User.IsInRole("Admin") || User.Identity.Name == rev.Author)
+							{
+								<div class="card-footer">
+									<a asp-action="DeleteReview" asp-route-revid="@rev.Id" asp-route-itemid="@Model.Id">@Localizer["Delete"]</a>
+								</div>
+							}
+						</div>
+					}
+		}
+	</div>
+</div>
+
+
+
