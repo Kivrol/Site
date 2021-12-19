@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "LSpRE2fhJpxTMUOEux4ooMn4whseffTSDPPYUVVHP1oReapFveaOsFBPwgmo8sXBodNzmxoScONfPIbTL2kMZQ==",
+  "dgSpecHash": "pJinFxkKpSt4IuaWyVlteTH3ZYf2M0gNkB4okwLUg8oapPKdsuKNIK+BjAS8sXNU7aF9Rve/Fn3AEjA9QCoMFQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\FireG\\Desktop\\Новая папка\\PShop\\PShop.csproj",
+  "projectFilePath": "C:\\Users\\FireG\\Documents\\GitHub\\Site\\PShop\\PShop.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\FireG\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\FireG\\.nuget\\packages\\identitymodel\\5.1.1\\identitymodel.5.1.1.nupkg.sha512",

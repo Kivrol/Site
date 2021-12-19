@@ -29,8 +29,6 @@ namespace PShop.Models
         public long ScoreSumm { get; set; }
         public long ScoreCount { get; set; }
         public string Tag1 { set; get; }
-        public string Tag2 { set; get; }
-        public string Tag3 { set; get; }
 
         public List<Review> Reviews { get; set; }
 

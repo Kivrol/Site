@@ -152,7 +152,7 @@
 	<div class="card-body row ">
 		@foreach (var item in Model)
 		{
-			if (filterBy != "" && (item.Tag1 == filterBy || item.Tag2 == filterBy || item.Tag3 == filterBy))
+			if (filterBy != "" && (item.Tag1 == filterBy))
 			{
 
 				<partial name="OneItem" model="item" />

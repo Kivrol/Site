@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\FireG\\Desktop\\Новая папка\\PShop\\PShop.csproj": {}
+    "C:\\Users\\FireG\\Documents\\GitHub\\Site\\PShop\\PShop.csproj": {}
   },
   "projects": {
-    "C:\\Users\\FireG\\Desktop\\Новая папка\\PShop\\PShop.csproj": {
+    "C:\\Users\\FireG\\Documents\\GitHub\\Site\\PShop\\PShop.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\FireG\\Desktop\\Новая папка\\PShop\\PShop.csproj",
+        "projectUniqueName": "C:\\Users\\FireG\\Documents\\GitHub\\Site\\PShop\\PShop.csproj",
         "projectName": "PShop",
-        "projectPath": "C:\\Users\\FireG\\Desktop\\Новая папка\\PShop\\PShop.csproj",
+        "projectPath": "C:\\Users\\FireG\\Documents\\GitHub\\Site\\PShop\\PShop.csproj",
         "packagesPath": "C:\\Users\\FireG\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\FireG\\Desktop\\Новая папка\\PShop\\obj\\",
+        "outputPath": "C:\\Users\\FireG\\Documents\\GitHub\\Site\\PShop\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\FireG\\AppData\\Roaming\\NuGet\\NuGet.Config",
